@@ -8,11 +8,48 @@
 import numpy as np
 from sklearn.datasets import load_svmlight_file
 from sklearn.cross_validation import KFold
-from sklearn.linear_model import ElasticNetCV, ElasticNet
+from sklearn.linear_model import ElasticNetCV, ElasticNet, Lasso, LassoCV, Ridge, RidgeCV
 from sklearn.metrics import mean_squared_error, r2_score
 from matplotlib import pyplot as plt
 
 data, target = load_svmlight_file('data/E2006.train')
+
+#7.3.2
+"""
+met = ElasticNet(fit_intercept=True)
+kf = KFold(len(target), n_folds=10)
+pred = np.zeros_like(target)
+for train, test in kf:
+    met.fit(data[train], target[train])
+    pred[test] = met.predict(data[test])
+print('[EN 0.1] RMSE on testing (5 fold), {:.2}'.format(np.sqrt(mean_squared_error(target, pred))))
+print('[EN 0.1] R2 on testing (5 fold), {:.2}'.format(r2_score(target, pred)))
+print('')
+
+"""
+met = ElasticNetCV(fit_intercept=True)
+
+kf = KFold(len(target), n_folds=10)
+pred = np.zeros_like(target)
+for train, test in kf:
+    met.fit(data[train], target[train])
+    pred[test] = met.predict(data[test])
+
+print('[EN CV] RMSE on testing (10 fold), {:.2}'.format(np.sqrt(mean_squared_error(target, pred))))
+print('[EN CV] R2 on testing (10 fold), {:.2}'.format(r2_score(target, pred)))
+print('')
+
+met.fit(data, target)
+pred = met.predict(data)
+print('[EN CV] RMSE on training, {:.2}'.format(np.sqrt(mean_squared_error(target, pred))))
+print('[EN CV] R2 on training, {:.2}'.format(r2_score(target, pred)))
+
+
+"""
+
+
+
+
 
 # Edit the lines below if you want to switch method:
 # from sklearn.linear_model import Lasso
@@ -70,4 +107,4 @@ ax.plot([-5,-1], [-5,-1], 'r-', lw=2)
 ax.set_xlabel('Actual value')
 ax.set_ylabel('Predicted value')
 fig.savefig('Figure_10k_scatter_EN_l1_ratio.png')
-
+"""

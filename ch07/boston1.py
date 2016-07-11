@@ -14,10 +14,18 @@ import numpy as np
 from sklearn.datasets import load_boston
 from sklearn.linear_model import LinearRegression
 from matplotlib import pyplot as plt
+from pprint import pprint
 
 boston = load_boston()
 x = boston.data
+x = np.array([np.concatenate((v, [1])) for v in boston.data])
 y = boston.target
+
+## p145
+lr = LinearRegression(fit_intercept=True)
+lr.fit(x, y) # 訓練する
+p = np.array([lr.predict(xi) for xi in x])
+pprint(p-y)
 
 # Fitting a model is trivial: call the ``fit`` method in LinearRegression:
 lr = LinearRegression()
